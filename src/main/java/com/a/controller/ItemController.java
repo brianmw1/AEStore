@@ -1,10 +1,15 @@
 package com.a.controller;
 
-import java.util.List;
-
-import org.springframework.hateoas.EntityModel;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,64 +18,77 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.a.assembler.ItemModelAssembler;
 import com.a.entity.Item;
 import com.a.exception.ItemNotFoundException;
 import com.a.repository.ItemRepository;
 
 @RestController
-class ItemController {
+public class ItemController {
 
-  private final ItemRepository repository;
+    private final ItemRepository repository;
+    private ItemModelAssembler assembler;
+    
+    public ItemController(ItemRepository repository, ItemModelAssembler assembler) {
+        this.repository = repository;
+        this.assembler = assembler;
+        
+    }
 
-  ItemController(ItemRepository repository) {
-    this.repository = repository;
-  }
+    // Aggregate root
 
+    @GetMapping("/items")
+    public CollectionModel<EntityModel<Item>> all() {
 
-  // Aggregate root
-  // tag::get-aggregate-root[]
-  @GetMapping("/Items")
-  List<Item> all() {
-	System.out.println("pls");
-    return repository.findAll();
-  }
-  // end::get-aggregate-root[]
+        List<EntityModel<Item>> items = repository.findAll()
+                .stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
 
-  @PostMapping("/Items")
-  Item newItem(@RequestBody Item newItem) {
-    return repository.save(newItem);
-  }
+        return CollectionModel.of(items, linkTo(methodOn(ItemController.class).all()).withSelfRel());
+    }
 
-  // Single item
-  
-  @GetMapping("/Items/{id}")
-  EntityModel<Item> one(@PathVariable Long id) {
+    @PostMapping("/items")
+    public ResponseEntity<?> newItem(@RequestBody Item newItem) {
 
-    Item Item = repository.findById(id) //
-        .orElseThrow(() -> new ItemNotFoundException(id));
+        EntityModel<Item> entityModel = assembler.toModel(repository.save(newItem));
 
-    return EntityModel.of(Item, //
-        linkTo(methodOn(ItemController.class).one(id)).withSelfRel(),
-        linkTo(methodOn(ItemController.class).all()).withRel("Items"));
-  }
+        return ResponseEntity 
+                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) 
+                .body(entityModel);
+    }
 
-//  @PutMapping("/Items/{id}")
-//  Item replaceItem(@RequestBody Item newItem, @PathVariable Long id) {
-//    
-//    return repository.findById(id)
-//      .map(Item -> {
-//        Item.setName(newItem.getName());
-//        Item.setRole(newItem.getRole());
-//        return repository.save(Item);
-//      })
-//      .orElseGet(() -> {
-//        newItem.setId(id);
-//        return repository.save(newItem);
-//      });
-//  }
+    // Single item
+    @GetMapping("/items/{id}")
+    public EntityModel<Item> one(@PathVariable String bid) {
 
-  @DeleteMapping("/Items/{id}")
-  void deleteItem(@PathVariable Long id) {
-    repository.deleteById(id);
-  }
+        Item Item = repository.findById(bid) //
+                .orElseThrow(() -> new ItemNotFoundException(bid));
+
+        return assembler.toModel(Item);
+    }
+
+    @PutMapping("/items/{id}")
+    public ResponseEntity<?> replaceItem(@RequestBody Item newItem, @PathVariable String bid) {
+
+        Item updatedItem = repository.findById(bid)
+                .map(Item -> {
+                    Item.setName(newItem.getName());
+                    return repository.save(Item);
+                })
+                .orElseGet(() -> {
+                    newItem.setBid(bid);
+                    return repository.save(newItem);
+                });
+        
+        EntityModel<Item> entityModel = assembler.toModel(updatedItem);
+        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
+        
+    }
+
+    @DeleteMapping("/items/{id}")
+    public ResponseEntity<?> deleteItem(@PathVariable String bid) {
+        repository.deleteById(bid);
+        return ResponseEntity.noContent().build();
+    }
 }
