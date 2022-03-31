@@ -16,39 +16,63 @@
 
 	<body>
 		<div ng-controller="Item" class="container">
-			<div class="row navbar">
-				<h1>E-Store <small>Catalog</small></h1>
-			</div>
+		
+			<header>
+				<nav class="navbar navbar-light bg-light">
+					<span class="navbar-text">Team A Project</span>
+					<a class="btn btn-outline-success d-none d-lg-inline-block mb-3 mb-md-0 ml-md-3">View Cart</a>
+				</nav>
+
+			</header>
 			
-			<div class="row">
-				<table class="table">
-					<tr>
-						<th>ID</th>
-						<th>Name</th>
-						<th>Description</th>
-						<th>Item Type</th>
-						<th>Brand</th>
-						<th>Quantity Available</th>
-						<th>Price</th>
-						<th>Desired Quantity</th>
-					</tr>
-					<tr ng-repeat="item in items | filter: deletedFilter"  class="form-group">
-						<td>{{item.bid}}</td>
-						<td>{{item.name}}</td>
-						<td>{{item.description}}</td>
-						<td>{{item.type}}</td>
-						<td>{{item.brand}}</td>
-						<td>{{item.quantity}}</td>
-						<td>{{item.price}}</td>
-						<td><input type="text" ng-model="item.role" class="form-control"/></td>
-						<td><input type="button" value="Add to Cart" class="btn btn-danger"/></td>
-					</tr>
-				</table>
-			</div>
-			<div class="row">
-				<div class="toolbar">
-					<input type="button" value="Add New Item" class="btn btn-primary"/>
-					<input type="button" value="Save Changes" class="btn btn-success"/>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-2">
+						<h4>Filters</h4>
+						<form>
+							<div class="form-check"><strong>Type</strong></BR>
+								<ul class="filteroptions">
+									<li class="form-check-label" ng-repeat="type in itemTypes">
+										<input type="checkbox" class="form-check-input">
+											<span>{{type}}</span>
+									</li>
+								</ul>
+							</div>
+							<div class="form-check"><strong>Brand</strong></BR>
+								<ul>
+									<li class="form-check-label" ng-repeat="brand in itemBrands">
+										<input type="checkbox" class="form-check-input" id="$index">
+											<span>{{brand}}</span>
+									</li>
+								</ul>
+							</div>
+							<button type="submit" class="btn btn-primary">Apply Filters</button>
+						</form>
+					</div>
+					
+					<div class="col-10">
+						<table class="table">
+							<tr>
+								<th>Name</th>
+								<th>Description</th>
+								<th>Item Type</th>
+								<th>Brand</th>
+								<th>Quantity Available</th>
+								<th>Price</th>
+								<th>Desired Quantity</th>
+							</tr>
+							<tr ng-repeat="item in items | filter: deletedFilter"  class="form-group">
+								<td>{{item.name}}</td>
+								<td>{{item.description}}</td>
+								<td>{{item.type}}</td>
+								<td>{{item.brand}}</td>
+								<td>{{item.quantity}}</td>
+								<td>{{item.price}}</td>
+								<td><input type="text" ng-model="item.role" class="form-control"/></td>
+								<td><input type="button" value="Add to Cart" class="btn btn-danger"/></td>
+							</tr>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
