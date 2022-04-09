@@ -8,6 +8,7 @@ angular.module('demo', [])
 		$http.get('http://localhost:5000/items').
 			then(function(response) {
 				$scope.items = response.data._embedded.itemList;
+				console.log(response.data);
 				$scope.getItemTypes();
 			});
 		
