@@ -1,8 +1,8 @@
 /**
  * 
  */
-angular.module('demo', [])
-	.controller('Item', function($scope, $http) {
+ 
+app.controller('Item', function($scope, $location, $http) {
 
 		//get the list of items
 		$http.get('http://localhost:5000/items').
@@ -11,6 +11,11 @@ angular.module('demo', [])
 				console.log(response.data);
 				$scope.getItemTypes();
 			});
+			
+		// button changes view to the cart view
+		$scope.viewCart = function () {
+			$location.path('/cart')
+		}
 		
 		// array to hold item types
 		$scope.itemTypes = [];
