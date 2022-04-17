@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Thu Mar 31 14:49:05 EDT 2022:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-017f-e14f-49fb-0000028dbcc0 
-on database directory C:\Users\Bryan\Documents\GitHub\AEStore\db with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@531d72ca 
-Loaded from file:/C:/Users/Bryan/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
-java.vendor=Eclipse Adoptium
-java.runtime.version=17.0.1+12
-user.dir=C:\Users\Bryan\Documents\GitHub\AEStore
+Sun Apr 17 18:07:16 EDT 2022:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0180-3990-db70-000001637d00 
+on database directory C:\Users\User\Documents\school\eecs4413\project\demo\db with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@659e0bfd 
+Loaded from file:/C:/Users/User/.m2/repository/org/apache/derby/derby/10.14.2.0/derby-10.14.2.0.jar
+java.vendor=Oracle Corporation
+java.runtime.version=17.0.1+12-LTS-39
+user.dir=C:\Users\User\Documents\school\eecs4413\project\demo
 os.name=Windows 10
 os.arch=amd64
 os.version=10.0
