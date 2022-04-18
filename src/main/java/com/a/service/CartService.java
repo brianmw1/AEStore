@@ -59,4 +59,11 @@ public class CartService {
 		}
 		return total;
 	}
+
+	public void clearCart() {
+		// TODO Auto-generated method stub
+		System.out.println("cart cleared");
+		items.clear();
+		
+	}
 }

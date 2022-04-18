@@ -110,6 +110,7 @@ public class CartController {
     		}
     	}
     	po = poRepository.save(po);
+    	cartService.clearCart();
     	return new ResponseEntity<PurchaseOrder>(po, HttpStatus.OK);
     	
     }
