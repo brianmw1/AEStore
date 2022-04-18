@@ -10,8 +10,15 @@ app.controller('Register', function($scope, $location, $http) {
 			$location.path('/login');
 		}
 		
-		$scope.registerClick = function () {
-			$location.path('/checkout');
+		$scope.submitRegister = function(userInfo) {
+			console.log(userInfo);
+			$http.post('http://localhost:5000/authentication/register', userInfo).
+				// defines a function if request has been successfull
+				then(function(response) {
+					$location.path('/checkout');
+				}, function(response) {
+					console.log("error state");
+				});
 		}
 		
 		$scope.var3 = 'Register';
