@@ -17,6 +17,26 @@ app.controller('Item', function($scope, $location, $http) {
 			$location.path('/cart')
 		}
 		
+		// array to maintain the item 'type' filter
+		$scope.itemTypeFilter = [];
+		
+		$scope.change = function(type, active) {
+			if (active) {
+				$scope.itemTypeFilter.push(type)
+				console.log("push");
+				console.log($scope.itemTypeFilter);
+			}
+			else {
+				$scope.itemTypeFilter.splice($scope.itemTypeFilter.indexOf(type), 1);
+				console.log("removed");
+				console.log($scope.itemTypeFilter);
+			}
+		}
+		
+		
+		// array to maintain the item 'brand' filter
+		$scope.itemBrandFilter = [];
+		
 		// array to hold item types
 		$scope.itemTypes = [];
 		
