@@ -2,22 +2,29 @@ package com.a.entity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
-@IdClass(PurchaseOrderItemKey.class)
 public class PurchaseOrderItem {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	
 	@ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "po_id", referencedColumnName = "id")
-	private @Id PurchaseOrder po;
+	private PurchaseOrder po;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "item_bid", referencedColumnName = "bid")
-	private @Id Item item;
+	private Item item;
 	
 	public PurchaseOrder getPo() {
 		return po;
