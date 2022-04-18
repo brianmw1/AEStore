@@ -33,6 +33,27 @@ app.controller('Item', function($scope, $location, $http) {
 			}
 		}
 		
+		// add items to the client's cart'
+		$scope.addToCart = function(item) {
+			if (item.desiredQuantity == null) {
+				$http.post('http://localhost:5000/cart/addItem/' + item.bid).
+					then(function(response) {
+					console.log(response.data);
+				});
+				
+			}
+			else {
+				for (let i = 0; i < item.desiredQuantity; i++) {
+					$http.post('http://localhost:5000/cart/addItem/' + item.bid).
+						then(function(response) {
+						console.log(response.data);
+					});
+				}
+			}
+			console.log(item.desiredQuantity);
+		//	for (let i = 0; i < item.) 
+		}
+		
 		
 		// array to maintain the item 'brand' filter
 		$scope.itemBrandFilter = [];
