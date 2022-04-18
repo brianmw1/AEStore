@@ -24,11 +24,30 @@
 			</header>
 			
 			<h2>Register</h2>
-			<div>
-				{{var2}}
-			</div>
-			<button ng-click="registerClick()">Register</button>
-			<button ng-click="loginButtonClick()">Login</button>
+			<form ng-submit="submitRegister(userInfo)">
+				<div class="form-group">
+					<label for="fname">First Name</label>
+					<input type="text" ng-model="userInfo.fname" ng-requried="true" class="form-control" id="fname" placeholder="Enter First Name">
+				</div>
+				<div class="form-group">
+					<label for="lname">Last Name</label>
+					<input type="text" ng-model="userInfo.lname" ng-requried="true" class="form-control" id="lname" placeholder="Enter Last Name">
+				</div>
+				<div class="form-group">
+					<label for="username">Username</label>
+					<input type="text" ng-model="userInfo.username" ng-requried="true" class="form-control" id="username" placeholder="Enter username">
+				</div>
+				<div class="form-group">
+					<label for="password">Password</label>
+					<input type="password" ng-model="userInfo.password" ng-required="true" class="form-control" id="password" placeholder="Enter password">
+				</div>
+				<div>
+					<button type="submit" class="btn btn-primary" ng-click="registerClick()">Register</button>
+				</div>
+			</form>
+			</BR>
+			<p>Already have an account? Click here to login</p>
+			<button class="btn btn-primary" ng-click="loginButtonClick()">Login</button>
 
 		</div>
 	</body>

@@ -29,11 +29,11 @@
 				<div class="row">
 					<div class="col-2">
 						<h4>Filters</h4>
-						<form>
+
 							<div class="form-check"><strong>Type</strong></BR>
 								<ul class="filteroptions">
 									<li class="form-check-label" ng-repeat="type in itemTypes">
-										<input type="checkbox" class="form-check-input">
+										<input type="checkbox" ng-model="active" ng-change="change(type, active)" class="form-check-input">
 											<span>{{type}}</span>
 									</li>
 								</ul>
@@ -48,7 +48,7 @@
 							</div>
 							<button type="submit" class="btn btn-primary">Apply Filters</button></BR>
 							<button type="submit" class="btn btn-primary">Clear Filters</button>
-						</form>
+
 					</div>
 					
 					<div class="col-10">
@@ -62,15 +62,15 @@
 								<th>Price</th>
 								<th>Desired Quantity</th>
 							</tr>
-							<tr ng-repeat="item in items | filter: deletedFilter"  class="form-group">
+							<tr ng-repeat="item in items | filter: {'type' : ''} | filter: {'brand' : ''}"  class="form-group">
 								<td>{{item.name}}</td>
 								<td>{{item.description}}</td>
 								<td>{{item.type}}</td>
 								<td>{{item.brand}}</td>
 								<td>{{item.quantity}}</td>
 								<td>{{item.price}}</td>
-								<td><input type="text" ng-model="item.role" class="form-control"/></td>
-								<td><input type="button" value="Add to Cart" class="btn btn-danger"/></td>
+								<td><input type="text" ng-init="value='1'" value="1" ng-model="item.desiredQuantity" class="form-control"/></td>
+								<td><input type="button" ng-click="addToCart(item)" value="Add to Cart" class="btn btn-danger"/></td>
 							</tr>
 						</table>
 					</div>

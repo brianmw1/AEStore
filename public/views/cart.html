@@ -25,7 +25,30 @@
 			
 			<h2>Your Cart</h2>
 			<div>
-				{{var}}
+				<table class="table">
+					<tr>
+						<th>Product Name</th>
+						<th>Description</th>
+						<th>Item Type</th>
+						<th>Brand</th>
+						<th>Price Each</th>
+						<th>Quantity</th>
+						<th>Sub-Total</th>
+					</tr>
+					<tr ng-repeat="item in cart | filter: {'type' : ''} | filter: {'brand' : ''}"  class="form-group">
+						<td>{{item.name}}</td>
+						<td>{{item.description}}</td>
+						<td>{{item.type}}</td>
+						<td>{{item.brand}}</td>
+						<td>${{item.price}}</td>
+						<td>
+							<input type="button" ng-click="removeOne(item)" value="remove" class="btn btn-secondary btn-sm"/>
+							{{item.cartQuantity}}
+							<input type="button" ng-click="addToCart(item)" value="add" class="btn btn-secondary btn-sm"/>
+						</td>
+						<td><input type="button" ng-click="addToCart(item)" value="Remove All" class="btn btn-danger"/></td>
+					</tr>
+				</table>
 			</div>
 			<button ng-click="checkoutButtonClick()">Checkout</button>
 
