@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,7 @@ import com.a.repository.ItemRepository;
 import com.a.repository.PurchaseOrderItemRepository;
 import com.a.repository.PurchaseOrderRepository;
 import com.a.repository.UserRepository;
+import com.a.repository.VisitEventRepository;
 import com.a.service.CartService;
 
 @RestController
@@ -43,33 +46,35 @@ public class CartController {
 	private final ItemRepository itemRepository;
 	private final UserRepository userRepository;
 	private static int paymentCount = 0;
+	private VisitEventRepository visitEventRepository;
     
-    public CartController(UserRepository userRepository, PurchaseOrderRepository poRepository, PurchaseOrderItemRepository poItemRepository, CartService cartService, ItemRepository itemRepository) {
+    public CartController(UserRepository userRepository, PurchaseOrderRepository poRepository, PurchaseOrderItemRepository poItemRepository, CartService cartService, ItemRepository itemRepository, VisitEventRepository visitEventRepository) {
         this.poRepository = poRepository;
         this.poItemRepository = poItemRepository;
         this.cartService = cartService;
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
+        this.visitEventRepository = visitEventRepository;
     }
     
     @GetMapping("/cart") 
-    public ResponseEntity<Map<Item, Integer>> getCart() {
-    	return new ResponseEntity<Map<Item, Integer>>(cartService.getCart(), HttpStatus.OK);
+    public ResponseEntity<Map<String, Integer>> getCart() {
+    	return new ResponseEntity<Map<String, Integer>>(cartService.getCartString(), HttpStatus.OK);
     	
     }
     
     @PostMapping("/cart/addItem/{bid}")
-    public ResponseEntity<Map<Item,Integer>> addItem(@PathVariable("bid") String bid) {
+    public ResponseEntity<Map<String,Integer>> addItem(@PathVariable("bid") String bid, HttpServletRequest request) {
     	Item item = itemRepository.findById(bid).orElseThrow(() -> new ItemNotFoundException(bid));
     	cartService.addItem(item);
-    	return new ResponseEntity<Map<Item, Integer>>(cartService.getCart(), HttpStatus.OK);
+    	return new ResponseEntity<Map<String, Integer>>(cartService.getCartString(), HttpStatus.OK);
     }
     
     @PostMapping("/cart/removeItem/{bid}")
-    public ResponseEntity<Map<Item,Integer>> removeItem(@PathVariable("bid") String bid) {
+    public ResponseEntity<Map<String,Integer>> removeItem(@PathVariable("bid") String bid) {
     	Item item = itemRepository.findById(bid).orElseThrow(() -> new ItemNotFoundException(bid));
     	cartService.removeItem(item);
-    	return new ResponseEntity<Map<Item, Integer>>(cartService.getCart(), HttpStatus.OK);
+    	return new ResponseEntity<Map<String, Integer>>(cartService.getCartString(), HttpStatus.OK);
     }
     
     @GetMapping("/cart/getTotal")
@@ -78,7 +83,7 @@ public class CartController {
     }
     
     @GetMapping("/cart/checkout")
-    public ResponseEntity<PurchaseOrder> checkout(@RequestBody Map<String, String> json) {
+    public ResponseEntity<PurchaseOrder> checkout(@RequestBody Map<String, String> json, HttpServletRequest request) {
     	User user = userRepository.findById(json.get("username")).orElseThrow(() -> new UserNotFoundException(json.get("username")));
     	Address address = new Address();
     	address.setCountry(json.get("country"));

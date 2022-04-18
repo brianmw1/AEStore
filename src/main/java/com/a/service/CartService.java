@@ -49,6 +49,14 @@ public class CartService {
     public Map<Item, Integer> getCart() {
         return items;
     }
+    
+    public Map<String, Integer> getCartString() {
+    	Map<String,Integer> res = new HashMap<String,Integer>();
+		for (Map.Entry<Item, Integer> entry : items.entrySet()) {
+			res.put(entry.getKey().getBid(), entry.getValue());
+		}
+		return res;	
+    }
 
 	public Double getTotal() {
 		double total = 0;
