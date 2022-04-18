@@ -14,9 +14,11 @@ app.controller('Checkout', function($scope, $location, $http, $rootScope) {
 			const userOrder = Object.assign(user,order);
 			console.log($rootScope.currentUser)
 			console.log(userOrder);
-			$http.get('http://localhost:5000/cart/checkout', userOrder).
+			$http.post('http://localhost:5000/cart/checkout', userOrder).
 				then(function(response) {
-					console.log("Order Submitted");
+					console.log(response);
+					$scope.status = response.data.status;
+					console.log($scope.status);
 				})
 		}
 		
