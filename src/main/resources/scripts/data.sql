@@ -7,11 +7,11 @@ INSERT INTO ITEM (bid, name, description, type, brand, price, quantity) VALUES (
 device for personal use', 'computer', 'Apple', 1500, 100);
 
 /*populate the address table*/
-INSERT INTO Address (id, street, province, country, zip, phone) VALUES (1, '123 Yonge St', 'ON',
+INSERT INTO Address (street, province, country, zip, phone) VALUES ('123 Yonge St', 'ON',
 'Canada', 'K1E 6T5' ,'647-123-4567');
-INSERT INTO Address (id, street, province, country, zip, phone) VALUES (2, '445 Avenue rd', 'ON',
+INSERT INTO Address (street, province, country, zip, phone) VALUES ('445 Avenue rd', 'ON',
 'Canada', 'M1C 6K5' ,'416-123-8569');
-INSERT INTO Address (id, street, province, country, zip, phone) VALUES (3, '789 Keele St.', 'ON',
+INSERT INTO Address (street, province, country, zip, phone) VALUES ('789 Keele St.', 'ON',
 'Canada', 'K3C 9T5' ,'416-123-9568');
 
 /*populate user table */
@@ -20,9 +20,9 @@ INSERT INTO Users (username, fname, lname, password) VALUES ('bb123', 'Bob', 'Bo
 --/*
 --* Inserting data for table 'PO'
 --*/
-INSERT INTO purchase_order (id, user_username, status, address_id) VALUES (1, 'bb123', 'PROCESSED', 1);
-INSERT INTO purchase_order (id, user_username, status, address_id) VALUES (2, 'bb123', 'DENIED', 2);
-INSERT INTO purchase_order (id, user_username, status, address_id) VALUES (3, 'bb123', 'ORDERED', 3);
+INSERT INTO purchase_order (user_username, status, address_id) VALUES ('bb123', 'PROCESSED', 1);
+INSERT INTO purchase_order (user_username, status, address_id) VALUES ('bb123', 'DENIED', 1);
+INSERT INTO purchase_order (user_username, status, address_id) VALUES ('bb123', 'ORDERED', 1);
 --
 --/*
 ----*Inserting data for table 'POitem'

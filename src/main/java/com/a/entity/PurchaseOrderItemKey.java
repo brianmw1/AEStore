@@ -6,6 +6,8 @@ public class PurchaseOrderItemKey implements Serializable {
 	private PurchaseOrder po;
 	private Item item;
 	
+	public PurchaseOrderItemKey() {}
+	
 	public PurchaseOrderItemKey(PurchaseOrder po, Item item) {
 		super();
 		this.po = po;
