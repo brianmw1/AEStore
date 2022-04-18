@@ -50,7 +50,7 @@ public class ItemController {
     	List<Item> vItems = repository.findAll();
     	for(Item item:vItems) {
     		VisitEvent visitEvent = new VisitEvent();
-        	String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        	String date = new SimpleDateFormat("MM-dd-yyyy").format(new Date());
         	visitEvent.setDay(date);
         	visitEvent.setEventtype("VIEW");
         	visitEvent.setItem(item);

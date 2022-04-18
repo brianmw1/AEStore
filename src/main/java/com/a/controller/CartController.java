@@ -3,6 +3,8 @@ package com.a.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,7 @@ import com.a.entity.Item;
 import com.a.entity.PurchaseOrder;
 import com.a.entity.PurchaseOrderItem;
 import com.a.entity.User;
+import com.a.entity.VisitEvent;
 import com.a.exception.ItemNotFoundException;
 import com.a.exception.UserNotFoundException;
 import com.a.repository.ItemRepository;
@@ -35,6 +38,7 @@ import com.a.repository.PurchaseOrderRepository;
 import com.a.repository.UserRepository;
 import com.a.repository.VisitEventRepository;
 import com.a.service.CartService;
+import com.a.util.HttpReqRespUtil;
 
 @RestController
 public class CartController {
@@ -66,6 +70,15 @@ public class CartController {
     public ResponseEntity<Map<String,Integer>> addItem(@PathVariable("bid") String bid, HttpServletRequest request) {
     	Item item = itemRepository.findById(bid).orElseThrow(() -> new ItemNotFoundException(bid));
     	cartService.addItem(item);
+		VisitEvent visitEvent = new VisitEvent();
+    	String date = new SimpleDateFormat("MM-dd-yyyy").format(new Date());
+    	visitEvent.setDay(date);
+    	visitEvent.setEventtype("CART");
+    	visitEvent.setItem(item);
+    	String ip = HttpReqRespUtil.getClientIpAddressIfServletRequestExist();
+    	System.out.println(ip);
+    	visitEvent.setIpaddress(ip);
+    	visitEventRepository.save(visitEvent);
     	return new ResponseEntity<Map<String, Integer>>(cartService.getCartString(), HttpStatus.OK);
     }
     
@@ -81,8 +94,8 @@ public class CartController {
     	return new ResponseEntity<Double>(cartService.getTotal(), HttpStatus.OK);
     }
     
-    @GetMapping("/cart/checkout")
-    public ResponseEntity<PurchaseOrder> checkout(@RequestBody Map<String, String> json, HttpServletRequest request) {
+    @PostMapping("/cart/checkout")
+    public ResponseEntity<PurchaseOrder> checkout(@RequestBody Map<String, String> json) {
     	User user = userRepository.findById(json.get("username")).orElseThrow(() -> new UserNotFoundException(json.get("username")));
     	Address address = new Address();
     	address.setCountry(json.get("country"));
@@ -111,7 +124,20 @@ public class CartController {
     			poi.setPo(po);
     			poi.setPrice(item.getPrice() * quantity);
     			poi = poItemRepository.save(poi);
+    			
+    			
+	    		VisitEvent visitEvent = new VisitEvent();
+	        	String date = new SimpleDateFormat("MM-dd-yyyy").format(new Date());
+	        	visitEvent.setDay(date);
+	        	visitEvent.setEventtype("PURCHASE");
+	        	visitEvent.setItem(item);
+	        	String ip = HttpReqRespUtil.getClientIpAddressIfServletRequestExist();
+	        	System.out.println(ip);
+	        	visitEvent.setIpaddress(ip);
+	        	visitEventRepository.save(visitEvent);
     		}
+    		
+    		
     	}
     	po = poRepository.save(po);
     	cartService.clearCart();

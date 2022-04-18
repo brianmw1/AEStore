@@ -4,6 +4,7 @@ package com.a.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,48 +26,36 @@ import com.a.assembler.ItemModelAssembler;
 import com.a.assembler.UserModelAssembler;
 import com.a.entity.Item;
 import com.a.entity.User;
+import com.a.entity.VisitEvent;
 import com.a.exception.ItemNotFoundException;
 import com.a.exception.UserNotFoundException;
+import com.a.model.MonthSales;
 import com.a.repository.ItemRepository;
 import com.a.repository.UserRepository;
+import com.a.repository.VisitEventRepository;
+import com.a.service.AdminService;
 
 @RestController
 public class AdminController {
 	
-	private final UserRepository repository;
-	private UserModelAssembler assembler;
+	private final AdminService adminService;
+	private final VisitEventRepository visitEventRepository;
     
-    public AdminController(UserRepository repository, UserModelAssembler assembler) {
-        this.repository = repository;
-        this.assembler = assembler;
+    public AdminController(AdminService adminService, VisitEventRepository visitEventRepository) {
+        this.adminService = adminService;
+        this.visitEventRepository = visitEventRepository;
     }
 	
-    /*
-     * User object is id, fname, lname, username, password
-     */
-	@PostMapping("/admin/visits")
-    public ResponseEntity<?> newUser(@RequestBody User newUser) {
-		EntityModel<User> entityModel = assembler.toModel(repository.save(newUser));
-		
-        return ResponseEntity 
-                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) 
-                .body(entityModel);
+	@GetMapping("/admin/visits")
+    public ResponseEntity<?> visits() {
+		return new ResponseEntity<List<VisitEvent>>(visitEventRepository.findAll(),HttpStatus.OK);
+	}
+	
+	@GetMapping("/admin/stats/year/{year}/month/{month}")
+    public ResponseEntity<?> getStats(@PathVariable("year") int year, @PathVariable("month") int month) throws ParseException {
+		Map<String, Integer> monthSales = adminService.monthlySales(month, year).getItemSales();
+		return new ResponseEntity<Map<String, Integer>>(monthSales, HttpStatus.OK);
     }
 	
-	/*
-     * User object is id, fname, lname, username, password
-     */
-	@PostMapping("/admin/stats")
-    public ResponseEntity<?> loginUser(@RequestBody Map<String, String> json) {
-		User user = repository.findById(json.get("username")).orElseThrow(() -> new UserNotFoundException(json.get("username"))) ;
-		if(user.getPassword().equals(json.get("password"))) {
-			
-			EntityModel<?> entityModel = assembler.toModel(user);
-			return ResponseEntity 
-	                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()) 
-	                .body(entityModel);
-		} else {
-			return new ResponseEntity<Exception>(new UserNotFoundException(user.getUsername()), HttpStatus.UNAUTHORIZED);
-		}
-    }
+	
 }
