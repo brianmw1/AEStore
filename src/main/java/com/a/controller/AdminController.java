@@ -51,9 +51,9 @@ public class AdminController {
 		return new ResponseEntity<List<VisitEvent>>(visitEventRepository.findAll(),HttpStatus.OK);
 	}
 	
-	@GetMapping("/admin/stats")
-    public ResponseEntity<?> getStats(@RequestBody HashMap<String, Integer> json) throws ParseException {
-		Map<String, Integer> monthSales = adminService.monthlySales(json.get("month"), json.get("year")).getItemSales();
+	@GetMapping("/admin/stats/year/{year}/month/{month}")
+    public ResponseEntity<?> getStats(@PathVariable("year") int year, @PathVariable("month") int month) throws ParseException {
+		Map<String, Integer> monthSales = adminService.monthlySales(month, year).getItemSales();
 		return new ResponseEntity<Map<String, Integer>>(monthSales, HttpStatus.OK);
     }
 	
