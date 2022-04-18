@@ -105,10 +105,11 @@
 			<button type="submit" class="btn btn-primary">Confirm Order</button>
 			</form>
 			</div>
+			<div ng-if="status">
+				ORDER STATUS: Your order has been {{status}}
+			</div>
 
 		</div>
-		<div ng-show="status">
-			{{status}}
-		</div>
+
 	</body>
 </html>
