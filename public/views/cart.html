@@ -46,11 +46,20 @@
 							{{item.cartQuantity}}
 							<input type="button" ng-click="addToCart(item)" value="add" class="btn btn-secondary btn-sm"/>
 						</td>
-						<td><input type="button" ng-click="addToCart(item)" value="Remove All" class="btn btn-danger"/></td>
+						<td>${{item.price * item.cartQuantity}}<td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>TOTAL ${{total}}</td>
 					</tr>
 				</table>
 			</div>
-			<button ng-click="checkoutButtonClick()">Checkout</button>
+			<button class="btn btn-primary" ng-click="checkoutButtonClick()">Checkout</button>
 
 		</div>
 	</body>

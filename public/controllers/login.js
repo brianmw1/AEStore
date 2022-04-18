@@ -11,7 +11,7 @@ app.controller('Login', function($scope, $location, $http, $rootScope) {
 		
 		// function to log the user in and make http call
 		$scope.submitLogin = function (info) {
-			$http.post('http://localhost:5000/authentication/login', info).
+			$http.post('http://aestore-env.eba-iyvbduef.us-east-1.elasticbeanstalk.com/authentication/login', info).
 				// defines a function if request has been successfull
 				then(function(response) {
 					$rootScope.currentUser = info.username;
