@@ -29,7 +29,6 @@ import com.a.entity.PurchaseOrderItem;
 import com.a.entity.User;
 import com.a.exception.ItemNotFoundException;
 import com.a.exception.UserNotFoundException;
-import com.a.model.CartModel;
 import com.a.repository.ItemRepository;
 import com.a.repository.PurchaseOrderItemRepository;
 import com.a.repository.PurchaseOrderRepository;

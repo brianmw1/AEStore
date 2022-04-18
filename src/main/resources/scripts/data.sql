@@ -33,9 +33,9 @@ INSERT INTO purchase_order_item (po_id, item_bid, price) VALUES (2, 'c001', 500)
 --/*
 --* data for table 'VisitEvent'
 --*/
-INSERT INTO visit_event (id, ipaddress, day, item_bid, eventtype) VALUES (1, '1.23.4.5','12202022', 'b001',
+INSERT INTO visit_event (ipaddress, day, item_bid, eventtype) VALUES ('1.23.4.5','12202022', 'b001',
 'VIEW');
-INSERT INTO visit_event (id, ipaddress, day, item_bid, eventtype) VALUES (2, '1.23.4.5', '12242022', 'b001',
+INSERT INTO visit_event (ipaddress, day, item_bid, eventtype) VALUES ('1.23.4.5', '12242022', 'b001',
 'CART');
-INSERT INTO visit_event (id, ipaddress,day, item_bid, eventtype) VALUES (3,'1.23.4.5', '12252022', 'b001',
+INSERT INTO visit_event (ipaddress,day, item_bid, eventtype) VALUES ('1.23.4.5', '12252022', 'b001',
 'PURCHASE');

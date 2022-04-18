@@ -28,6 +28,7 @@ import com.a.entity.VisitEvent;
 import com.a.exception.ItemNotFoundException;
 import com.a.repository.ItemRepository;
 import com.a.repository.VisitEventRepository;
+import com.a.util.HttpReqRespUtil;
 
 @RestController
 public class ItemController {
@@ -53,7 +54,9 @@ public class ItemController {
         	visitEvent.setDay(date);
         	visitEvent.setEventtype("VIEW");
         	visitEvent.setItem(item);
-        	
+        	String ip = HttpReqRespUtil.getClientIpAddressIfServletRequestExist();
+        	System.out.println(ip);
+        	visitEvent.setIpaddress(ip);
         	visitEventRepository.save(visitEvent);
     	}
     	
