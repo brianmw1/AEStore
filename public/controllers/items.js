@@ -35,6 +35,7 @@ app.controller('Item', function($scope, $location, $http) {
 		
 		// add items to the client's cart'
 		$scope.addToCart = function(item) {
+			// no quantity entered in input box, add 1 by default
 			if (item.desiredQuantity == null) {
 				$http.post('http://localhost:5000/cart/addItem/' + item.bid).
 					then(function(response) {
@@ -42,6 +43,7 @@ app.controller('Item', function($scope, $location, $http) {
 				});
 				
 			}
+			// add the quantity the user requested to the cart
 			else {
 				for (let i = 0; i < item.desiredQuantity; i++) {
 					$http.post('http://localhost:5000/cart/addItem/' + item.bid).
@@ -87,49 +89,7 @@ app.controller('Item', function($scope, $location, $http) {
 			return !item.deleted;
 		};
 
-		$scope.add = function() {
-			var hasNewRecord = false;
-			//check if another new record is still pending
-			angular.forEach($scope.items, function(item) {
-				if (item.id == null && !item.item)
-					hasNewRecord = true;
-			});
-			if (!hasNewRecord)
-				//add a new record
-				$scope.items.push({ id: null });
-		};
 
-		$scope.delete = function(id) {
-			angular.forEach($scope.items, function(item) {
-				if (item.id == id) {
-					//mark the record as deleted
-					item.deleted = true;
-				}
-			});
-		};
 
-		$scope.save = function() {
-			angular.forEach($scope.items, function(item) {
-				if (item.deleted) {
-					if (item.id != null) {
-						//delete record
-						$http.delete('http://localhost:5000/items/' + item.id).
-							then(function(response) {
-								var index = $scope.items.indexOf(item);
-								$scope.items.splice(index, 1);
-							});
-					}
-				} else if (item.id == null) {
-					//create new record
-					$http.post('http://localhost:5000/items', item).
-						then(function(response) {
-							item.id = response.data.id;
-						});
-				} else {
-					//edit existing record
-					$http.put('http://localhost:5000/items/' + item.id, item).
-						then(function(response) { });
-				}
-			});
-		};
+;
 	});

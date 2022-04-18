@@ -28,19 +28,25 @@
 				<table class="table">
 					<tr>
 						<th>Product Name</th>
-						<th>Price</th>
+						<th>Description</th>
+						<th>Item Type</th>
+						<th>Brand</th>
+						<th>Price Each</th>
 						<th>Quantity</th>
-						<th>Total</th>
+						<th>Sub-Total</th>
 					</tr>
-					<tr ng-repeat="item in items | filter: {'type' : ''} | filter: {'brand' : ''}"  class="form-group">
+					<tr ng-repeat="item in cart | filter: {'type' : ''} | filter: {'brand' : ''}"  class="form-group">
 						<td>{{item.name}}</td>
 						<td>{{item.description}}</td>
 						<td>{{item.type}}</td>
 						<td>{{item.brand}}</td>
-						<td>{{item.quantity}}</td>
-						<td>{{item.price}}</td>
-						<td><input type="text" ng-init="value='1'" value="1" ng-model="item.desiredQuantity" class="form-control"/></td>
-						<td><input type="button" ng-click="addToCart(item)" value="Add to Cart" class="btn btn-danger"/></td>
+						<td>${{item.price}}</td>
+						<td>
+							<input type="button" ng-click="removeOne(item)" value="remove" class="btn btn-secondary btn-sm"/>
+							{{item.cartQuantity}}
+							<input type="button" ng-click="addToCart(item)" value="add" class="btn btn-secondary btn-sm"/>
+						</td>
+						<td><input type="button" ng-click="addToCart(item)" value="Remove All" class="btn btn-danger"/></td>
 					</tr>
 				</table>
 			</div>
