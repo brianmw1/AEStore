@@ -94,8 +94,8 @@ public class CartController {
     	return new ResponseEntity<Double>(cartService.getTotal(), HttpStatus.OK);
     }
     
-    @GetMapping("/cart/checkout")
-    public ResponseEntity<PurchaseOrder> checkout(@RequestBody Map<String, String> json, HttpServletRequest request) {
+    @PostMapping("/cart/checkout")
+    public ResponseEntity<PurchaseOrder> checkout(@RequestBody Map<String, String> json) {
     	User user = userRepository.findById(json.get("username")).orElseThrow(() -> new UserNotFoundException(json.get("username")));
     	Address address = new Address();
     	address.setCountry(json.get("country"));
