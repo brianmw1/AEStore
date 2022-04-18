@@ -3,8 +3,12 @@ package com.a.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -20,26 +24,39 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.a.assembler.ItemModelAssembler;
 import com.a.entity.Item;
+import com.a.entity.VisitEvent;
 import com.a.exception.ItemNotFoundException;
 import com.a.repository.ItemRepository;
+import com.a.repository.VisitEventRepository;
 
 @RestController
 public class ItemController {
 
     private final ItemRepository repository;
     private ItemModelAssembler assembler;
+    private VisitEventRepository visitEventRepository;
     
-    public ItemController(ItemRepository repository, ItemModelAssembler assembler) {
+    public ItemController(ItemRepository repository, ItemModelAssembler assembler, VisitEventRepository visitEventRepository) {
         this.repository = repository;
         this.assembler = assembler;
-        
+        this.visitEventRepository = visitEventRepository;
     }
 
     // Aggregate root
 
     @GetMapping("/items")
     public CollectionModel<EntityModel<Item>> all() {
-
+    	List<Item> vItems = repository.findAll();
+    	for(Item item:vItems) {
+    		VisitEvent visitEvent = new VisitEvent();
+        	String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        	visitEvent.setDay(date);
+        	visitEvent.setEventtype("VIEW");
+        	visitEvent.setItem(item);
+        	
+        	visitEventRepository.save(visitEvent);
+    	}
+    	
         List<EntityModel<Item>> items = repository.findAll()
                 .stream()
                 .map(assembler::toModel)
