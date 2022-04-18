@@ -14,7 +14,7 @@ app.controller('Checkout', function($scope, $location, $http, $rootScope) {
 			const userOrder = Object.assign(user,order);
 			console.log($rootScope.currentUser)
 			console.log(userOrder);
-			$http.post('http://localhost:5000/cart/checkout', userOrder).
+			$http.post('http://aestore-env.eba-iyvbduef.us-east-1.elasticbeanstalk.com/cart/checkout', userOrder).
 				then(function(response) {
 					$scope.status = response.data.status;
 				})

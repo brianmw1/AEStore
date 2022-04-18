@@ -5,7 +5,7 @@
 app.controller('Item', function($scope, $location, $http) {
 
 		//get the list of items
-		$http.get('http://localhost:5000/items').
+		$http.get('http://aestore-env.eba-iyvbduef.us-east-1.elasticbeanstalk.com/items').
 			then(function(response) {
 				$scope.items = response.data._embedded.itemList;
 				console.log(response.data);
@@ -37,7 +37,7 @@ app.controller('Item', function($scope, $location, $http) {
 		$scope.addToCart = function(item) {
 			// no quantity entered in input box, add 1 by default
 			if (item.desiredQuantity == null) {
-				$http.post('http://localhost:5000/cart/addItem/' + item.bid).
+				$http.post('http://aestore-env.eba-iyvbduef.us-east-1.elasticbeanstalk.com/cart/addItem/' + item.bid).
 					then(function(response) {
 					console.log(response.data);
 				});
@@ -46,7 +46,7 @@ app.controller('Item', function($scope, $location, $http) {
 			// add the quantity the user requested to the cart
 			else {
 				for (let i = 0; i < item.desiredQuantity; i++) {
-					$http.post('http://localhost:5000/cart/addItem/' + item.bid).
+					$http.post('http://aestore-env.eba-iyvbduef.us-east-1.elasticbeanstalk.com/cart/addItem/' + item.bid).
 						then(function(response) {
 						console.log(response.data);
 					});

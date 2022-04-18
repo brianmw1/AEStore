@@ -11,7 +11,7 @@ app.controller('Cart', function($scope, $location, $http) {
 
 		$scope.loadCart = function() {
 		// get the items in the cart
-		$http.get('http://localhost:5000/cart').
+		$http.get('http://aestore-env.eba-iyvbduef.us-east-1.elasticbeanstalk.com/cart').
 			then(function(response) {
 				$scope.cartItems = response.data;
 				// iterate over the cart items and get the bid of each
@@ -24,7 +24,7 @@ app.controller('Cart', function($scope, $location, $http) {
 		}
 		
 		// loads all the items from the database into items variable
-		$http.get('http://localhost:5000/items').
+		$http.get('http://aestore-env.eba-iyvbduef.us-east-1.elasticbeanstalk.com/items').
 			then(function(response) {
 				$scope.items = response.data._embedded.itemList;
 				$scope.loadCart();
@@ -32,17 +32,33 @@ app.controller('Cart', function($scope, $location, $http) {
 			
 		// add items to the client's cart'
 		$scope.addToCart = function(item) {
-			$http.post('http://localhost:5000/cart/addItem/' + item.bid).
+			$http.post('http://aestore-env.eba-iyvbduef.us-east-1.elasticbeanstalk.com/cart/addItem/' + item.bid).
 				then(function(response) {
 					console.log(response.data);
 				});
 			}
+			
+
+			$http.get('http://aestore-env.eba-iyvbduef.us-east-1.elasticbeanstalk.com/cart/getTotal').
+				then(function(response) {
+					console.log(response.data);
+					$scope.total = response.data;
+				})
+
 		
 		$scope.removeOne = function(item) {
-			$http.post('http://localhost:5000/cart/removeItem/' + item.bid).
+			$http.post('http://aestore-env.eba-iyvbduef.us-east-1.elasticbeanstalk.com/cart/removeItem/' + item.bid).
 				then(function(response) {
 					console.log(response.data);
 				});
+		}
+		
+		$scope.removeAll = function(item) {
+			console.log(item);
+				$http.post('http://aestore-env.eba-iyvbduef.us-east-1.elasticbeanstalk.com/cart/removeItem/' + item.bid).
+					then(function(response) {
+						console.log(response.data);
+					});
 		}
 		
 
